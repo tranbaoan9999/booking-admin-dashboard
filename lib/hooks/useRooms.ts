@@ -9,7 +9,7 @@ export function useRooms() {
   });
 }
 
-export function useRoom(id: string) {
+export function useRoom(id: number) {
   return useQuery({
     queryKey: ['rooms', id],
     queryFn: () => roomsService.getById(id),
@@ -32,7 +32,7 @@ export function useUpdateRoom() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<Room> }) =>
+    mutationFn: ({ id, data }: { id: number; data: Partial<Room> }) =>
       roomsService.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['rooms'] });

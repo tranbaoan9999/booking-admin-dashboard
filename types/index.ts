@@ -1,11 +1,23 @@
-export interface Room {
-  id: string;
+export interface RoomType {
+  id: number;
   name: string;
-  type: string;
-  capacity: number;
+  maxCapacity: number;
   price: number;
-  status: 'available' | 'occupied' | 'maintenance';
+}
+
+export interface Room {
+  id: number;
+  roomNumber: string;
+  status: 'AVAILABLE' | 'OCCUPIED' | 'MAINTENANCE';
+  roomType: RoomType;
   amenities: string[];
+  imageUrls: string[];
+}
+
+export interface RoomsApiResponse {
+  success: boolean;
+  data: Room[];
+  timestamp: string;
 }
 
 export interface Booking {

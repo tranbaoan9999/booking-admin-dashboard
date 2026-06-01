@@ -1,15 +1,58 @@
-import { apiClient } from '../client';
-import { Room } from '@/types';
+import { RoomsApiResponse, Room } from '@/types';
+
+const API_BASE_URL = 'https://booking-api-gg1w.onrender.com/api/v1';
 
 export const roomsService = {
-  getAll: () => apiClient.get<Room[]>('/rooms'),
+  getAll: async (): Promise<Room[]> => {
+    const response = await fetch(`${API_BASE_URL}/rooms`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch rooms');
+    }
+    const data: RoomsApiResponse = await response.json();
+    return data.data;
+  },
 
-  getById: (id: string) => apiClient.get<Room>(`/rooms/${id}`),
+  getById: async (id: number): Promise<Room> => {
+    const response = await fetch(`${API_BASE_URL}/rooms/${id}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch room');
+    }
+    const data = await response.json();
+    return data.data;
+  },
 
-  create: (data: Omit<Room, 'id'>) => apiClient.post<Room>('/rooms', data),
+  create: async (data: Partial<Room>): Promise<Room> => {
+    const response = await fetch(`${API_BASE_URL}/rooms`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to create room');
+    }
+    const result = await response.json();
+    return result.data;
+  },
 
-  update: (id: string, data: Partial<Room>) =>
-    apiClient.put<Room>(`/rooms/${id}`, data),
+  update: async (id: number, data: Partial<Room>): Promise<Room> => {
+    const response = await fetch(`${API_BASE_URL}/rooms/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to update room');
+    }
+    const result = await response.json();
+    return result.data;
+  },
 
-  delete: (id: string) => apiClient.delete(`/rooms/${id}`),
+  delete: async (id: number): Promise<void> => {
+    const response = await fetch(`${API_BASE_URL}/rooms/${id}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      throw new Error('Failed to delete room');
+    }
+  },
 };
