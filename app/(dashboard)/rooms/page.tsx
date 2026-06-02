@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useRooms, useDeleteRoom } from '@/lib/hooks/useRooms';
 import { Room } from '@/types';
 import { RoomsTable } from '@/components/features/rooms/RoomsTable';
@@ -11,18 +11,15 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { Plus, BedDouble } from 'lucide-react';
 
 export default function RoomsPage() {
+  const router = useRouter();
   const { data: rooms, isLoading, error, refetch } = useRooms();
   const deleteRoomMutation = useDeleteRoom();
-  const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
 
   const handleView = (room: Room) => {
-    setSelectedRoom(room);
-    // TODO: Open view modal
     console.log('View room:', room);
   };
 
   const handleEdit = (room: Room) => {
-    // TODO: Open edit modal
     console.log('Edit room:', room);
   };
 
@@ -36,30 +33,21 @@ export default function RoomsPage() {
     }
   };
 
-  const handleCreateRoom = () => {
-    // TODO: Open create modal
-    console.log('Create new room');
-  };
-
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Room Management
-          </h1>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
-            Manage your rooms and availability
-          </p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Room Management</h1>
+          <p className="mt-1 text-gray-500 dark:text-gray-400">Manage your rooms and availability</p>
         </div>
-        <Button onClick={handleCreateRoom} className="gap-2">
+        <Button onClick={() => router.push('/rooms/create')} className="gap-2">
           <Plus className="h-4 w-4" />
           Create Room
         </Button>
       </div>
 
       <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-950">
-        {isLoading && <LoadingState message="Loading rooms..." />}
+        {isLoading && <LoadingState message="Loading rooms…" />}
 
         {error && (
           <ErrorState
@@ -73,10 +61,7 @@ export default function RoomsPage() {
             icon={BedDouble}
             title="No rooms found"
             description="Get started by creating your first room"
-            action={{
-              label: 'Create Room',
-              onClick: handleCreateRoom,
-            }}
+            action={{ label: 'Create Room', onClick: () => router.push('/rooms/create') }}
           />
         )}
 

@@ -2,6 +2,14 @@ import { RoomsApiResponse, Room } from '@/types';
 
 const API_BASE_URL = 'https://booking-api-gg1w.onrender.com/api/v1';
 
+export interface CreateRoomPayload {
+  roomNumber: string;
+  status: Room['status'];
+  roomType: { id: number };
+  amenities: number[];
+  imageUrls: string[];
+}
+
 export const roomsService = {
   getAll: async (): Promise<Room[]> => {
     const response = await fetch(`${API_BASE_URL}/rooms`);
@@ -21,7 +29,7 @@ export const roomsService = {
     return data.data;
   },
 
-  create: async (data: Partial<Room>): Promise<Room> => {
+  create: async (data: CreateRoomPayload): Promise<Room> => {
     const response = await fetch(`${API_BASE_URL}/rooms`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
