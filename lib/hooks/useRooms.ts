@@ -6,6 +6,7 @@ export function useRooms() {
   return useQuery({
     queryKey: ['rooms'],
     queryFn: roomsService.getAll,
+    staleTime: 5 * 60 * 1000
   });
 }
 
