@@ -20,14 +20,36 @@ export interface RoomsApiResponse {
   timestamp: string;
 }
 
+export interface BookingGuest {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+}
+
+export interface BookingRoom {
+  id: number;
+  roomNumber: string;
+  roomType: RoomType;
+}
+
 export interface Booking {
-  id: string;
-  roomId: string;
-  guestName: string;
+  id: number;
   checkIn: string;
   checkOut: string;
-  status: 'confirmed' | 'pending' | 'cancelled' | 'completed';
+  numberOfGuests: number;
+  room: BookingRoom;
+  guest: BookingGuest;
+  status: 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED' | 'CHECKED_IN' | 'CHECKED_OUT';
   totalPrice: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BookingsApiResponse {
+  success: boolean;
+  data: Booking[];
+  timestamp: string;
 }
 
 export interface Amenity {
