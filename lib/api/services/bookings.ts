@@ -17,6 +17,17 @@ export const bookingsService = {
     return data.data;
   },
 
+  updateStatus: async (id: number, status: Booking['status']): Promise<Booking> => {
+    const response = await fetch(`${API_BASE_URL}/bookings/${id}/status`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status }),
+    });
+    if (!response.ok) throw new Error('Failed to update booking status');
+    const data = await response.json();
+    return data.data;
+  },
+
   cancel: async (id: number): Promise<Booking> => {
     const response = await fetch(`${API_BASE_URL}/bookings/${id}/cancel`, {
       method: 'PUT',

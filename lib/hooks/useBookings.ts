@@ -16,6 +16,19 @@ export function useBooking(id: number) {
   });
 }
 
+export function useUpdateBookingStatus() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, status }: { id: number; status: import('@/types').Booking['status'] }) =>
+      bookingsService.updateStatus(id, status),
+    onSuccess: (updated) => {
+      queryClient.invalidateQueries({ queryKey: ['bookings'] });
+      queryClient.setQueryData(['bookings', updated.id], updated);
+    },
+  });
+}
+
 export function useCancelBooking() {
   const queryClient = useQueryClient();
 

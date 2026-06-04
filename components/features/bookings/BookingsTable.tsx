@@ -21,7 +21,7 @@ import { Button } from '@/components/ui/Button';
 import { formatCurrency, formatDate, formatDateTime } from '@/lib/utils/format';
 import { cn } from '@/lib/utils/cn';
 import {
-  Eye, Pencil, Ban,
+  Pencil, Ban,
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight,
   ChevronUp, ChevronDown, ChevronsUpDown,
   User, Mail, Phone,
@@ -29,7 +29,7 @@ import {
 
 interface BookingsTableProps {
   data: Booking[];
-  onView?: (booking: Booking) => void;
+  onRowClick?: (booking: Booking) => void;
   onEdit?: (booking: Booking) => void;
   onCancel?: (booking: Booking) => void;
 }
@@ -38,7 +38,9 @@ type BookingStatus = Booking['status'];
 
 const STATUS_CONFIG: Record<BookingStatus, { variant: 'success' | 'warning' | 'error' | 'info' | 'default'; label: string }> = {
   PENDING:     { variant: 'warning', label: 'Pending'     },
+  APPROVED:    { variant: 'info',    label: 'Approved'    },
   CONFIRMED:   { variant: 'info',    label: 'Confirmed'   },
+  REJECTED:    { variant: 'error',   label: 'Rejected'    },
   CHECKED_IN:  { variant: 'success', label: 'Checked In'  },
   CHECKED_OUT: { variant: 'default', label: 'Checked Out' },
   CANCELLED:   { variant: 'error',   label: 'Cancelled'   },
@@ -73,7 +75,7 @@ function SortableHeader({
   );
 }
 
-export function BookingsTable({ data, onView, onEdit, onCancel }: BookingsTableProps) {
+export function BookingsTable({ data, onRowClick, onEdit, onCancel }: BookingsTableProps) {
   const [sorting, setSorting]           = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [pagination, setPagination]     = useState({ pageIndex: 0, pageSize: 10 });
@@ -245,38 +247,18 @@ export function BookingsTable({ data, onView, onEdit, onCancel }: BookingsTableP
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => onView?.(row.original)}
-                className="h-8 w-8 p-0 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                title="View"
-              >
-                <Eye className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => onEdit?.(row.original)}
+                onClick={(e) => { e.stopPropagation(); onEdit?.(row.original); }}
                 className="h-8 w-8 p-0 text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
                 title="Edit"
               >
                 <Pencil className="h-4 w-4" />
               </Button>
-              {canCancel && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => onCancel?.(row.original)}
-                  className="h-8 w-8 p-0 text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400"
-                  title="Cancel"
-                >
-                  <Ban className="h-4 w-4" />
-                </Button>
-              )}
             </div>
           );
         },
       },
     ],
-    [onView, onEdit, onCancel]
+    [onEdit, onCancel]
   );
 
   const table = useReactTable({
@@ -321,7 +303,11 @@ export function BookingsTable({ data, onView, onEdit, onCancel }: BookingsTableP
           <TableBody>
             {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
+                <TableRow
+                  key={row.id}
+                  onClick={() => onRowClick?.(row.original)}
+                  className={cn(onRowClick && 'cursor-pointer')}
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}

@@ -40,7 +40,7 @@ export interface Booking {
   numberOfGuests: number;
   room: BookingRoom;
   guest: BookingGuest;
-  status: 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED' | 'CHECKED_IN' | 'CHECKED_OUT';
+  status: 'PENDING' | 'APPROVED' | 'CONFIRMED' | 'REJECTED' | 'CANCELLED' | 'COMPLETED' | 'CHECKED_IN' | 'CHECKED_OUT';
   totalPrice: number;
   createdAt: string;
   updatedAt: string;
