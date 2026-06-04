@@ -8,7 +8,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const dispatch = useAppDispatch();
   const theme = useAppSelector((state) => state.ui.theme);
 
-  // Initialize theme from localStorage on mount
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | 'system' | null;
 
@@ -20,11 +19,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }
   }, [dispatch]);
 
-  // Apply theme changes to DOM
+
   useEffect(() => {
     const root = window.document.documentElement;
 
-    // Remove existing theme classesanag
     root.classList.remove('light', 'dark');
 
     if (theme === 'system') {

@@ -5,7 +5,7 @@ export function useAmenities() {
   return useQuery({
     queryKey: ['amenities'],
     queryFn: amenitiesService.getAll,
-    staleTime: 5 * 60 * 1000,
+    staleTime: Infinity
   });
 }
 
@@ -13,6 +13,6 @@ export function useRoomTypes() {
   return useQuery({
     queryKey: ['room-types'],
     queryFn: roomTypesService.getAll,
-    staleTime: 5 * 60 * 1000,
+    staleTime: Infinity
   });
 }
