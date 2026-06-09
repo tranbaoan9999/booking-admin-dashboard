@@ -1,6 +1,5 @@
 import { RoomsApiResponse, Room } from '@/types';
-
-const API_BASE_URL = 'https://booking-api-gg1w.onrender.com/api/v1';
+import { API_BASE_URL } from '@/lib/api/client';
 
 export interface CreateRoomPayload {
   roomNumber: string;

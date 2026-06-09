@@ -241,7 +241,6 @@ export function BookingsTable({ data, onRowClick, onEdit, onCancel }: BookingsTa
         header: 'Actions',
         enableSorting: false,
         cell: ({ row }) => {
-          const canCancel = CANCELLABLE.includes(row.original.status);
           return (
             <div className="flex items-center gap-1">
               <Button
