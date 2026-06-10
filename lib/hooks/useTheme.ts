@@ -6,11 +6,7 @@ export function useTheme() {
   const theme = useAppSelector((state) => state.ui.theme);
 
   const toggleTheme = () => {
-    if (theme === 'light') {
-      dispatch(setThemeAction('dark'));
-    } else {
-      dispatch(setThemeAction('light'));
-    }
+    dispatch(setThemeAction(theme === 'light' ? 'dark' : 'light'));
   };
 
   const setTheme = (newTheme: 'light' | 'dark') => {
