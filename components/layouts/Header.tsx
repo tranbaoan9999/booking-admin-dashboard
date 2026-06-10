@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Bell, User, LogOut, Settings, UserCircle, Calendar, BedDouble, AlertCircle, Sun, Moon, Monitor } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
 import { useTheme } from '@/lib/hooks/useTheme';
+import { useAuth } from '@/lib/hooks/useAuth';
 
 const notifications = [
   {
@@ -41,6 +42,7 @@ export function Header() {
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
   const [notificationCount] = useState(notifications.filter(n => n.unread).length);
   const { theme, setTheme } = useTheme();
+  const { user, logout } = useAuth();
 
   return (
     <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-gray-200 bg-white px-6 dark:border-gray-800 dark:bg-gray-950">
@@ -64,7 +66,6 @@ export function Header() {
           >
             {theme === 'light' && <Sun className="h-5 w-5" />}
             {theme === 'dark' && <Moon className="h-5 w-5" />}
-            {theme === 'system' && <Monitor className="h-5 w-5" />}
           </button>
 
           {/* Theme Menu */}
@@ -106,22 +107,6 @@ export function Header() {
                   >
                     <Moon className="h-4 w-4" />
                     <span>Dark</span>
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setTheme('system');
-                      setIsThemeMenuOpen(false);
-                    }}
-                    className={cn(
-                      'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors',
-                      theme === 'system'
-                        ? 'bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-400'
-                        : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
-                    )}
-                  >
-                    <Monitor className="h-4 w-4" />
-                    <span>System</span>
                   </button>
                 </div>
               </div>
@@ -247,10 +232,10 @@ export function Header() {
               <div className="absolute right-0 top-full z-50 mt-2 w-56 rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-800 dark:bg-gray-950">
                 <div className="border-b border-gray-200 p-4 dark:border-gray-800">
                   <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    Admin User
+                    {user?.displayName ?? 'Admin User'}
                   </p>
                   <p className="text-xs text-gray-500 dark:text-gray-400">
-                    admin@example.com
+                    {user?.role ?? 'Administrator'}
                   </p>
                 </div>
 
@@ -282,7 +267,7 @@ export function Header() {
                   <button
                     onClick={() => {
                       setIsDropdownOpen(false);
-                      // Add logout logic here
+                      logout();
                     }}
                     className={cn(
                       'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors',

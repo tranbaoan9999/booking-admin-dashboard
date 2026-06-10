@@ -8,14 +8,12 @@ export function useTheme() {
   const toggleTheme = () => {
     if (theme === 'light') {
       dispatch(setThemeAction('dark'));
-    } else if (theme === 'dark') {
-      dispatch(setThemeAction('system'));
     } else {
       dispatch(setThemeAction('light'));
     }
   };
 
-  const setTheme = (newTheme: 'light' | 'dark' | 'system') => {
+  const setTheme = (newTheme: 'light' | 'dark') => {
     dispatch(setThemeAction(newTheme));
   };
 
